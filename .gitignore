@@ -1,0 +1,9 @@
+node_modules
+dist
+test-artifacts
+data/gallery.json
+data/gallery.json.tmp
+.DS_Store
+*.local
+.env
+.env.*

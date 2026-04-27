@@ -1,0 +1,239 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --popover: #ffffff;
+  --popover-foreground: #111111;
+  --primary: #111111;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #111111;
+  --muted: rgb(17 17 17 / 0.12);
+  --muted-foreground: rgb(17 17 17 / 0.62);
+  --accent: rgb(17 17 17 / 0.06);
+  --accent-foreground: #111111;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: rgb(17 17 17 / 0.12);
+  --grid-dot: #d8d8d8;
+  --input: rgb(17 17 17 / 0.14);
+  --ring: #111111;
+  --sidebar: rgb(255 255 255 / 0.9);
+  color: var(--foreground);
+  background: var(--background);
+  font-family:
+    "Questrial", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-synthesis: weight;
+  letter-spacing: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 320px;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+.app-shell {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--background);
+  background-image: radial-gradient(circle, var(--grid-dot) 1px, transparent 1px);
+  background-position: center;
+  background-size: 20px 20px;
+}
+
+.app-shell[data-theme="dark"] {
+  --background: #101010;
+  --foreground: #f3f3f3;
+  --card: #171717;
+  --card-foreground: #f3f3f3;
+  --popover: #181818;
+  --popover-foreground: #f3f3f3;
+  --primary: #f3f3f3;
+  --primary-foreground: #111111;
+  --secondary: #232323;
+  --secondary-foreground: #f3f3f3;
+  --muted: rgb(255 255 255 / 0.14);
+  --muted-foreground: rgb(255 255 255 / 0.68);
+  --accent: rgb(255 255 255 / 0.1);
+  --accent-foreground: #ffffff;
+  --border: rgb(255 255 255 / 0.16);
+  --grid-dot: #343434;
+  --input: rgb(255 255 255 / 0.18);
+  --ring: #f3f3f3;
+  --sidebar: rgb(10 10 10 / 0.18);
+}
+
+.preview-area {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 100vh;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 5vw, 72px);
+  background: transparent;
+}
+
+.format-frame {
+  position: relative;
+  width: min(100%, calc((100vh - 112px) * var(--format-ratio)));
+  max-width: min(860px, 100%);
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #01151e;
+  box-shadow: none;
+}
+
+.fullscreen-visual {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: #01151e;
+}
+
+.fullscreen-export-frame {
+  position: absolute;
+  top: 0;
+  left: -200vw;
+  width: 1024px;
+  height: 1024px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.format-overview {
+  display: grid;
+  grid-template-columns: repeat(7, auto);
+  gap: 14px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+}
+
+.format-overview-item {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  min-width: 0;
+}
+
+.format-overview-item > span {
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.format-overview-frame {
+  position: relative;
+  height: clamp(56px, min(15vh, calc((100vw - 560px) / 9)), 132px);
+  min-height: 0;
+  overflow: hidden;
+  background: #01151e;
+}
+
+.shader-stage {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.control-panel {
+  width: min(440px, calc(100vw - 40px));
+  height: calc(100vh - 40px);
+  margin: 20px;
+  background: var(--sidebar);
+  border-radius: 20px;
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  backdrop-filter: blur(18px) saturate(1.08);
+  scrollbar-width: none;
+}
+
+.control-panel::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  body {
+    overflow: auto;
+  }
+
+  .app-shell {
+    flex-direction: column-reverse;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .preview-area {
+    width: 100%;
+    min-height: 42vh;
+    padding: 24px;
+  }
+
+  .format-frame {
+    width: min(100%, calc((42vh - 48px) * var(--format-ratio)));
+    max-width: 100%;
+  }
+
+  .format-overview {
+    grid-template-columns: repeat(3, auto);
+    gap: 12px;
+  }
+
+  .format-overview-frame {
+    height: clamp(48px, 12vw, 72px);
+  }
+
+  .control-panel {
+    width: calc(100% - 40px);
+    max-height: 68vh;
+    min-height: auto;
+    padding: 24px;
+    border-top: 0;
+    border-right: 0;
+  }
+}
