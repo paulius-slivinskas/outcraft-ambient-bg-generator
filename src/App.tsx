@@ -2106,26 +2106,34 @@ function slugify(value: string) {
 }
 
 async function readGalleryState(): Promise<GalleryState> {
-  const response = await fetch(galleryApiPath, {
-    headers: { Accept: "application/json" },
-  });
+  try {
+    const response = await fetch(galleryApiPath, {
+      headers: { Accept: "application/json" },
+    });
 
-  if (!response.ok) {
-    throw new Error("Gallery file could not be loaded.");
+    if (!response.ok) {
+      throw new Error("Gallery file could not be loaded.");
+    }
+
+    return normalizeGalleryState(await response.json());
+  } catch {
+    return readLegacyGalleryState() ?? createDefaultGalleryState();
   }
-
-  return normalizeGalleryState(await response.json());
 }
 
 async function writeGalleryState(state: GalleryState): Promise<void> {
-  const response = await fetch(galleryApiPath, {
-    body: JSON.stringify(state),
-    headers: { "Content-Type": "application/json" },
-    method: "PUT",
-  });
+  try {
+    const response = await fetch(galleryApiPath, {
+      body: JSON.stringify(state),
+      headers: { "Content-Type": "application/json" },
+      method: "PUT",
+    });
 
-  if (!response.ok) {
-    throw new Error("Gallery file could not be saved.");
+    if (!response.ok) {
+      throw new Error("Gallery file could not be saved.");
+    }
+  } catch {
+    writeLegacyGalleryState(state);
   }
 }
 
@@ -2147,6 +2155,17 @@ function readLegacyGalleryState(): GalleryState | null {
   } catch {
     return null;
   }
+}
+
+function writeLegacyGalleryState(state: GalleryState) {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(
+    legacyGalleryStorageKey,
+    JSON.stringify(normalizeGalleryState(state)),
+  );
 }
 
 function mergeGalleryStates(

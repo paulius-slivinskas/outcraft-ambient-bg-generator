@@ -17,6 +17,9 @@ const galleryFilePath = resolve(
 );
 
 export default defineConfig({
+  base: process.env.GITHUB_REPOSITORY
+    ? `/${process.env.GITHUB_REPOSITORY.split("/")[1]}/`
+    : "/",
   plugins: [galleryFilePlugin(), react(), tailwindcss()],
   server: {
     watch: {
